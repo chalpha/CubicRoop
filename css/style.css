@@ -1,0 +1,144 @@
+/*******************************
+* index.php
+********************************/
+#title {
+    font-family: Yu Gothic;
+    font-size: 80px;
+    text-align: center;
+}
+/*******************************
+* select.php
+********************************/
+#titleRoom {
+    font-family: Yu Gothic;
+    font-size: 40px;
+    text-align: center;
+}
+.btnRoom {
+    height: 150px;
+    width: 150px;
+    white-space: normal !important;
+}
+#selKind {
+    width: 100px;
+}
+#roomName {
+    width: 300px;
+}
+/*******************************
+* room.php
+********************************/
+html, body, main, .container-fluid {
+    height: 100%;
+}
+#body {
+    height: 100%;
+}
+#scrambleText{
+    font-family: Yu Gothic;
+    font-size: 16px;
+    text-align: center;
+}
+.start{
+    color: aqua !important;
+}
+.touch{
+    color: red;
+}
+.timerText{
+    font-size : 5em;
+    text-align: center;
+}
+.stay{
+    font-weight: bold;
+}
+.btnTimer,
+.btnParity {
+    text-align: center;
+}
+#secRow {
+    height: calc(100% - 93px);
+}
+#divMsg {
+    overflow-y:scroll;
+    height: calc(100% - 55px);
+}
+#thPlayer {
+    white-space: nowrap;
+    width: 50px;
+}
+#timeTableBody tr {
+    white-space: nowrap;
+}
+.tar {
+    text-align: right;
+}
+/*******************************
+* 会話
+********************************/
+figure {
+    margin: 0px;
+}
+legend {
+    font-size: 14px;
+    margin: 0px;
+}
+.arrow_answer,
+.arrow_question {
+    position: relative;
+    background: #FFF; /*吹き出しの色*/
+    border: 3px solid rgba(240,120,255,1); /*吹き出しの外枠,太さはpxの数字,色はカッコ内の4つの数字をいじる*/
+    padding: 2% 2%;
+    border-radius: 10px; /*吹き出しを丸めたいならここ*/
+    width: 62%; /*吹き出しの幅*/
+}
+.arrow_question {
+    float: right;
+}
+.arrow_answer:after,
+.arrow_answer:before,
+.arrow_question:after,
+.arrow_question:before {
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+}
+.arrow_question:after,
+.arrow_question:before { right: 100%; }
+.arrow_answer:after,
+.arrow_answer:before { left: 100%; }
+.arrow_answer:after,
+.arrow_question:after {
+    border-color: rgba(255, 255, 255, 0);
+    border-width: 15px;
+    margin-top: -15px;
+}
+.arrow_answer:after { border-left-color: #fff ; }
+.arrow_question:after { border-right-color: #fff ; }
+.arrow_answer:before,
+.arrow_question:before {
+    border-color: rgba(200, 200, 200, 0);
+    border-width: 16px;
+    margin-top: -16px;
+}
+.arrow_answer:before { border-left-color: rgba(240,120,255,1);border-left-width: 20px; } /*吹き出しの外枠（その２）*/
+.arrow_question:before { border-right-color: rgba(240,120,255,1); border-right-width: 20px; } /*吹き出しの外枠（その３）*/
+.question_image {
+    float: left;
+}
+.answer_image {
+    float: right;
+}
+.answer_image img,.question_image img {
+    width: 48px;
+}
+.question_Box {
+    margin-bottom: 5px;
+    margin-right: 10px;
+    overflow: hidden;
+}
+.question_Box p{ line-height: 1.5;}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>        
+        <meta  http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>スクランブル生成</title>
+    </head>
+    <body>
+        <!-- スクランブル生成ボタン -->
+        <div id="divNewRoom" class="input-group">
+            <select class="custom-select" id="selKind">
+                <option>種目選択</option>
+                <option value="333" selected>333</option>
+                <option value="444">444</option>
+                <option value="OH">333OH(未実装)</option>
+            </select>
+            <label id="lblCnt">件</label>
+            <div class="input-group-append">
+                <button id="btnScramble" class="btn btn-outline-success">スクランブル100件生成</button>
+            </div>
+        </div>   
+        <script type="text/javascript" src="./js/jquery-3.2.1.min.js"></script>
+        <script type="text/javascript" src="https://www.gstatic.com/firebasejs/4.8.2/firebase.js"></script>
+        <script type="text/javascript" src="./js/accessFirebase.js"></script>
+        <script type="text/javascript">
+            // スクランブル情報
+            var scrambleRef = firebase.database().ref("scramble/");
+            var kind = 333;
+            
+
+            var xhr= new XMLHttpRequest();
+            var cnt = 0;
+            // ハンドラの登録.
+            xhr.onreadystatechange = function() {
+                switch ( xhr.readyState ) {
+                    case 4: // データ受信完了.
+                        if( xhr.status === 200 || xhr.status === 304 ) {
+                            var data = JSON.parse(xhr.responseText);
+                            //kind = $('#selKind').val();
+                            var scrambleRef = firebase.database().ref("scramble/" + kind);
+                            for (var scrambleNum in data[0].scrambles) {
+                                scrambleRef.push({
+                                    scramble: data[0].scrambles[scrambleNum]
+                                });
+                                cnt++;
+                            }
+                        } else {
+                            console.log( 'Failed. HttpStatus: '+xhr.statusText );
+                        }
+                        alert(cnt + "件作成しました");
+                        cnt = 0;
+                        getCurrentCnt();
+                        break;
+                }
+            };
+            $('#btnScramble').click(function() {
+                // 100個(仮
+                var url = 'http://localhost:2014/scramble/.json?e=' + kind + '*10';
+                xhr.open("GET", url);
+                xhr.setRequestHeader("Content-Type" , "application/json");
+                xhr.setRequestHeader("*" , "Access-Control-Allow-Headers");
+                xhr.send();
+            });
+            $('#selKind').change(function() {
+                // 現在の件数取得
+                kind = $('#selKind').val();
+                getCurrentCnt();
+            });
+            
+            function getCurrentCnt() {
+                var scrambleRef = firebase.database().ref("scramble/" + kind);
+                scrambleRef.once('value').then(function(ss) {
+                    var msg = ss.val();
+                    var currentCnt = 0;
+                    for(var key in msg) {
+                        currentCnt++;
+                    }
+                    $('#lblCnt')[0].textContent = currentCnt + "件";
+                });
+            }
+        </script>
+    </body>
+</html>
