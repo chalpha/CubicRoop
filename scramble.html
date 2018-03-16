@@ -54,7 +54,7 @@
             };
             $('#btnScramble').click(function() {
                 // 100個(仮
-                var url = 'http://localhost:2014/scramble/.json?e=' + kind + '*10';
+                var url = 'http://localhost:2014/scramble/.json?e=' + kind + '*100';
                 xhr.open("GET", url);
                 xhr.setRequestHeader("Content-Type" , "application/json");
                 xhr.setRequestHeader("*" , "Access-Control-Allow-Headers");

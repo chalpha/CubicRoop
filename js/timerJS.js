@@ -1,6 +1,12 @@
+/**
+ * タイマー用JS
+ */
+
+// 各情報格納用firebase
 var timeRef = firebase.database().ref("room/" + roomId + "/time/");
 var currentScrambleRef = firebase.database().ref("room/" + roomId + "/scramble/");
 var scrambleRef = firebase.database().ref("scramble/" + kind + "/");
+
 // タイマー用変数
 var startTime = 0;
 var stopTime = 0;
@@ -8,17 +14,20 @@ var timerId;
 var startFlg = false;
 var pushTime;
 var currentMesureTime;
-
+// タイマー用定数
 const INSPECTION_TIME = 15;
 const FREEZING_TH = 1000;
 const TOUCHING_TH = 550;
+
 var touchTimer;
 // 計測回数
 var timerCnt = 1;
 // 測定可能かどうか
 var playable = false;
 
-// タイマー動作
+/**
+ * タイマー動作
+ */
 $('#body')
     .keyup(function(event) {
         if ((event.target.id !== "msgIn" && event.target.id !== "btnNext") && playable) {
@@ -112,13 +121,17 @@ $('#timeTableBody')
         }
     });
     
-// 長押し
+/**
+ * 長押し時の処理
+ */
 function standbyStart() {
     $('#timerText').addClass("start");
     clearInterval(touchTimer);
 }
 
-// タイマー処理
+/**
+ * タイマー表示
+ */
 function updateTimerText() {	
     stopTime = new Date();	// 経過時間を退避
     myTime = stopTime.getTime() - startTime.getTime();	// 通算ミリ秒計算
@@ -126,7 +139,9 @@ function updateTimerText() {
     $('#timerText').text(getTime(myTime));
 }
 
-// タイム整形
+/**
+ * タイム整形
+ */
 function getTime(myTime) {
     myH = Math.floor(myTime / (60 * 60 * 1000));	// '時間'取得
     time = "";
@@ -152,8 +167,9 @@ function getTime(myTime) {
     return time + myS + "." + myMS;
 }
 
-
-// タイム登録
+/**
+ * タイム登録
+ */
 function addTimerList(time) {
     var timeRef2 = firebase.database().ref("room/" + roomId + "/time/" + timerCnt + "/");
     currentMesureTime = time;
@@ -161,7 +177,10 @@ function addTimerList(time) {
         [id] : currentMesureTime
     });
 }
-// タイムのリアルタイム表示
+
+/**
+ * タイムのリアルタイム表示
+ */
 timeRef.on('value', function(ss) {
     var msg = ss.val();
     if (msg[1] !== undefined)
@@ -198,8 +217,9 @@ timeRef.on('value', function(ss) {
     $('#divTimeTable').animate({scrollLeft : $('#divTimeTable')[0].scrollWidth});
 });
 
-
-// 次のスクランブルボタン押下
+/**
+ * 次のスクランブルボタン押下
+ */
 $('#btnNext').click(function () {
     // 測定回数のカウントアップ
     timeRef.update({
@@ -222,7 +242,9 @@ $('#btnNext').click(function () {
     $('#btnNext')[0].disabled = true;
 });
 
-// スクランブル表示
+/**
+ * スクランブル表示
+ */
 currentScrambleRef.on('value', function(ss) {
     for(var key in ss.val()){
         // スクランブル表示
@@ -238,7 +260,9 @@ currentScrambleRef.on('value', function(ss) {
     $('.btnParity').hide();
 });
 
-// +2ボタン押下
+/**
+ * +2ボタン押下
+ */
 $('#btnPlusTwo').change(function(e) {
     if (e.target.checked) {
         var d = new Date();
@@ -262,7 +286,10 @@ $('#btnPlusTwo').change(function(e) {
         addTimerList($('#timerText').text());
     }
 });
-// DNFボタン押下
+
+/**
+ * DNFボタン押下
+ */
 $('#btnDnf').change(function(e) {
     if (e.target.checked) {
         addTimerList("DNF");
@@ -272,7 +299,9 @@ $('#btnDnf').change(function(e) {
     }
 });
 
-// PPボタン押下
+/**
+ * PPボタン押下
+ */
 $('#btnPP').change(function(e) {
     currentMesureTime = currentMesureTime.split("(")[0];
     if (e.target.checked && $('#lblOP').hasClass("active")) {
@@ -286,7 +315,9 @@ $('#btnPP').change(function(e) {
     }
 });
 
-// OPボタン押下
+/**
+ * OPボタン押下
+ */
 $('#btnOP').change(function(e) {
     currentMesureTime = currentMesureTime.split("(")[0];
     if (e.target.checked && $('#lblPP').hasClass("active")) {

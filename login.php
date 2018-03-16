@@ -6,8 +6,6 @@ define("Consumer_Secret", "lsZ5IMeYmkwIMVeRgcBztferP8Ae5qUmM5EIJ5Z1XaCbKPh1cR");
  
 //Callback URL
 define('Callback', 'http://cubic-roop.ice-cube.info/callback.php');
-//define('Callback', 'http://chalpha.php.xdomain.jp/callback.php');
-//define('Callback', 'http://localhost/CubicRoop/callback.php');
  
 //ライブラリを読み込む
 require "twitteroauth-master/autoload.php";

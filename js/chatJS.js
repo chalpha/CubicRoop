@@ -1,5 +1,14 @@
+/**
+ * チャット用JS
+ */
+
+// メッセージ格納用firebase
 var messageRef = firebase.database().ref("room/" + roomId + "/message/");
-// 発言処理
+
+/**
+ * 発言処理
+ *  Enter押下時にfirebaseにメッセージ内容を格納
+ */
 $('#msgIn').keypress(function (e) {
     if (e.keyCode === 13 && $('#msgIn').val() !== "") {
         messageRef.set({
@@ -12,7 +21,10 @@ $('#msgIn').keypress(function (e) {
     }
 });
 
-// 発言時のリアルタイム表示
+/**
+ * 発言時のリアルタイム表示
+ *  メッセージ格納用firebase更新時に画面上にメッセージを表示する
+ */
 messageRef.on('value', function(ss) {
     var msg = ss.val();
     if (ss.val() === null) {

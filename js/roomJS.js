@@ -1,13 +1,20 @@
+/**
+ * ルーム用JS
+ */
+
+// 各情報格納用firebase
 var roomRef = firebase.database().ref("room/");
 var memberRef = firebase.database().ref("room/" + roomId + "/member/");
 var leaderRef = firebase.database().ref("room/" + roomId + "/leader/");
 var historyRef = firebase.database().ref("history/member/");
 
+// ログインID
 var id = $('#idIn').val();
 
 // ルーム名表示
 $('#titleRoom').text("計測・チャットルーム(" + decodeURI(roomName) + ")");
 
+// 入室メンバーリスト
 var memberList = new Array();
 
 // 遷移先(デフォはルーム選択画面
@@ -17,10 +24,14 @@ var tranAddr = "select.php";
 var opeTimerId;
 const TIMEOUT_TH = 600000;
 
-// 入室時にメンバーを追加
+/**
+ * メンバー追加
+ *  メンバー情報格納用firebaseにメンバーを追加する
+ */
 memberRef.update({
     [id]: $('#nameIn').val()
 });
+
 // 入室時間を記録
 var enterDate = new Date();
 enterDate.setHours(enterDate.getHours() + 9);
@@ -29,7 +40,9 @@ historyRef.update({
 });
 updateOpeTime();
 
-// 退室・ログアウトボタン押下時
+/**
+ * 退室・ログアウトボタン押下時
+ */
 $('.btnRemove').click(function(e) {
     if (e.target.id === "btnLogout") {
         tranAddr = 'logout.php';
@@ -62,7 +75,9 @@ $('.btnRemove').click(function(e) {
     }
 });
 
-// リーダー退室時
+/**
+ * リーダー退室時
+ */
 roomRef.on('child_removed', function() {
     // 強制退室
     if (!leaderFlg) {
@@ -70,7 +85,9 @@ roomRef.on('child_removed', function() {
         $('#errorMsg').modal('show');
     }
 });
-// リーダー変更時
+/**
+ * リーダー変更時
+ */
 leaderRef.on('child_added', function(ss) {
     // 自分がリーダーになった場合
     if (ss.key === id) {
@@ -79,7 +96,9 @@ leaderRef.on('child_added', function(ss) {
     }
 });
 
-// 退室確認メッセージ
+/**
+ * 退室確認メッセージ
+ */
 $('#errorMsg').on('hidden.bs.modal', function (e) {
     if (leaderFlg) {
         // メンバーを削除
@@ -90,11 +109,16 @@ $('#errorMsg').on('hidden.bs.modal', function (e) {
     window.location.href = tranAddr;
 });
 
+/**
+ * ブラウザクローズ時、退室処理実行
+ */
 $(window).on("beforeunload",function(e){
     $('#btnRemove').click();
 });
 
-// 操作時間判定
+/**
+ * 操作時間判定
+ */
 function updateOpeTime() {
     // 操作時間を記録
     var operationDate = new Date();
@@ -107,12 +131,16 @@ function updateOpeTime() {
     opeTimerId = setInterval(timeoutOperation, TIMEOUT_TH);
 }
 
-// タイムアウト
+/**
+ * 無操作タイムアウト
+ */
 function timeoutOperation() {
     $('#btnRemove').click();
 }
 
-// メンバーのリアルタイム表示
+/**
+ * メンバーのリアルタイム表示
+ */
 memberRef.on('value', function(ss) {
     var msg = ss.val();
     memberList = new Array();
@@ -126,7 +154,9 @@ memberRef.on('value', function(ss) {
 });
 
 changeLeader();
-// リーダーの場合のみスクランブル、リーダー変更ボタン有効化
+/**
+ * リーダーの場合のみスクランブル、リーダー変更ボタン有効化
+ */
 function changeLeader() {
     if (leaderFlg) {
         $('#btnNext')[0].hidden = false;
@@ -137,7 +167,9 @@ function changeLeader() {
     }
 }
 
-// リーダー譲渡
+/**
+ * リーダー譲渡
+ */
 $('#btnChangeLeader').click(function () {
     $('#changeLeaderDialog form div').remove();
     for (var name of memberList) {
@@ -149,6 +181,9 @@ $('#btnChangeLeader').click(function () {
     $('#changeLeaderDialog').modal('show');
 });
 
+/**
+ * リーダー譲渡実行
+ */
 $('#btnOk').click(function () {
     var newLeaderId = $('#changeLeaderDialog input:checked')[0].id.substr(2);
     var newLeaderName = $('#lbl' + newLeaderId).text();

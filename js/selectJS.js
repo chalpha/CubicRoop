@@ -1,7 +1,15 @@
-// ルーム情報
+/**
+ * ルーム作成用JS
+ */
+
+// ルーム情報格納用firebase
 var roomRef = firebase.database().ref("room/");
 var room;
-// ルームボタンのリアルタイム表示
+
+/**
+ * ルームボタンのリアルタイム表示
+ *  ルーム情報格納用firebase更新時にルームボタンを更新する
+ */
 roomRef.on('value', function(ss) {
     $('#divRoomBtn button').remove();
     room = ss.val();
@@ -21,7 +29,9 @@ roomRef.on('value', function(ss) {
                 .append('<button class="btn btn-outline-primary btnRoom" value="' + roomId + '"">' + "[" + room[roomId].kind + "]<br>" + room[roomId].name + '<br>' + memberCnt +  '人</button>');
         $('#divRoomBtn').append(divRoomBtn);
 
-        // ルームボタン押下
+        /**
+         * ルームボタン押下時
+         */
         $('.btnRoom').click(function(e) {
             var roomId = e.target.value;
             var roomName = room[roomId].name;
@@ -43,7 +53,10 @@ roomRef.on('value', function(ss) {
     }
 });
 
-// ルーム作成ボタン押下
+/**
+ * ルーム作成ボタン押下時
+ *  入力チェックを実施し、ルーム情報格納firebaseに情報を格納する
+ */
 $('#newRoomForm').submit(function() {
     // ルーム名入力チェック
     if ($('#roomName').val() === "") {
@@ -74,7 +87,9 @@ $('#newRoomForm').submit(function() {
     $('#newRoomId').val(newRoomRef.key);
 });
 
-// パスワードチェック押下
+/**
+ * パスワードチェック押下時(未実装)
+ */
 $('#chkSecret').change(function(e) {
     if (e.target.checked) {
         $('#txPass')[0].disabled = false;
